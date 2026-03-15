@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react"
 import Button from "components/ui/Button"
 import Upload from "components/Upload"
 import { useNavigate } from "react-router"
-import { MAX_UPLOAD_SIZE_MB } from "../lib/constants"
+import { MAX_UPLOAD_SIZE_MB } from "../../lib/constants"
 
 export function meta({}: Route.MetaArgs) {
   return [
