@@ -36,7 +36,7 @@ const Upload: React.FC<UploadProps> = ({ onComplete, onError }) => {
     }
 
     if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
-      const message = "File is too large. Maximum 50MB allowed."
+      const message = `File is too large. Maximum ${MAX_UPLOAD_SIZE_MB}MB allowed.`
       setError(message)
       onError?.(message)
       return
