@@ -2,6 +2,8 @@ import { CheckCircle2, ImageIcon, UploadIcon } from "lucide-react"
 import React, { useState } from "react"
 import { useOutletContext } from "react-router"
 import {
+  MAX_FILE_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
   REDIRECT_DELAY_MS,
   PROGRESS_INTERVAL_MS,
   PROGRESS_STEP,
@@ -9,10 +11,12 @@ import {
 
 interface UploadProps {
   onComplete?: (base64Data: string) => void
+  onError?: (message: string) => void
 }
 
-const Upload: React.FC<UploadProps> = ({ onComplete }) => {
+const Upload: React.FC<UploadProps> = ({ onComplete, onError }) => {
   const [file, setFile] = useState<File | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [progress, setProgress] = useState(0)
 
@@ -20,6 +24,23 @@ const Upload: React.FC<UploadProps> = ({ onComplete }) => {
 
   const processFile = (selectedFile: File) => {
     if (!isSignedIn) return
+
+    setError(null)
+
+    const isImage = selectedFile.type?.startsWith("image/")
+    if (!isImage) {
+      const message = "File must be an image (jpg/png)."
+      setError(message)
+      onError?.(message)
+      return
+    }
+
+    if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
+      const message = "File is too large. Maximum 50MB allowed."
+      setError(message)
+      onError?.(message)
+      return
+    }
 
     const reader = new FileReader()
     reader.onload = () => {
@@ -101,7 +122,7 @@ const Upload: React.FC<UploadProps> = ({ onComplete }) => {
                 : "Sign in or sign up with Puter to upload"}
             </p>
 
-            <p className="help">Maximum file size is 50MB.</p>
+            <p className="help">Supports JPG, PNG formats up to {MAX_UPLOAD_SIZE_MB}MB</p>
           </div>
         </div>
       ) : (

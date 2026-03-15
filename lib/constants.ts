@@ -1,5 +1,9 @@
 export const PUTER_WORKER_URL = import.meta.env.VITE_PUTER_WORKER_URL || ""
 
+// Upload file size limits
+export const MAX_UPLOAD_SIZE_MB = 10
+export const MAX_FILE_SIZE_BYTES = MAX_UPLOAD_SIZE_MB * 1024 * 1024
+
 // Storage Paths
 export const STORAGE_PATHS = {
   ROOT: "roomify",
@@ -13,6 +17,9 @@ export const PROGRESS_INCREMENT = 15
 export const REDIRECT_DELAY_MS = 600
 export const PROGRESS_INTERVAL_MS = 100
 export const PROGRESS_STEP = 5
+
+// Upload/Upload validation constants
+export const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024
 
 // UI Constants
 export const GRID_OVERLAY_SIZE = "60px 60px"
