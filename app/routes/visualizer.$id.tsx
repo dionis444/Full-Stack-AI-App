@@ -98,7 +98,9 @@ const VisualizerId = () => {
                 )}
               </div>
             )}
-            $
+             </div>
+           )}
+           {isProcessing && (
             {isProcessing && (
               <div className="render-overlay">
                 <div className="rendering-card">
