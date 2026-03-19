@@ -10,7 +10,7 @@ import {
 } from "../lib/constants"
 
 interface UploadProps {
-  onComplete?: (base64Data: string) => void
+  onComplete?: (base64Data: string) => Promise<boolean | void>
   onError?: (message: string) => void
 }
 
@@ -48,6 +48,25 @@ const Upload: React.FC<UploadProps> = ({ onComplete, onError }) => {
       setFile(selectedFile)
       setProgress(0)
 
+      const attemptComplete = async () => {
+        if (!onComplete) return
+
+        try {
+          const result = await onComplete(base64Data)
+          if (result === false) {
+            throw new Error("Upload completion failed")
+          }
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : "Upload failed during completion."
+          setError(message)
+          setFile(null)
+          setProgress(0)
+        }
+      }
+
       const intervalId = window.setInterval(() => {
         setProgress((prev) => {
           const nextProgress = Math.min(prev + PROGRESS_STEP, 100)
@@ -55,7 +74,7 @@ const Upload: React.FC<UploadProps> = ({ onComplete, onError }) => {
           if (nextProgress >= 100) {
             window.clearInterval(intervalId)
             window.setTimeout(() => {
-              onComplete?.(base64Data)
+              void attemptComplete()
             }, REDIRECT_DELAY_MS)
           }
 
@@ -122,7 +141,9 @@ const Upload: React.FC<UploadProps> = ({ onComplete, onError }) => {
                 : "Sign in or sign up with Puter to upload"}
             </p>
 
-            <p className="help">Supports JPG, PNG formats up to {MAX_UPLOAD_SIZE_MB}MB</p>
+            <p className="help">
+              Supports JPG, PNG formats up to {MAX_UPLOAD_SIZE_MB}MB
+            </p>
           </div>
         </div>
       ) : (
