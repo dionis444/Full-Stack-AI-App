@@ -35,11 +35,10 @@ export default function Home() {
     const saved = await createProject({ item: newItem, visibility: "private" })
 
     if (!saved) {
-      console.error("Failed to create project")
-      return false
+      throw new Error("Failed to create project")
     }
 
-    setProjects((prev) => [newItem, ...prev])
+    setProjects((prev) => [saved, ...prev])
 
     navigate(`/visualizer/${newId}`, {
       state: {
@@ -113,7 +112,7 @@ export default function Home() {
           <div className="projects-grid">
             {projects.map(
               ({ id, name, renderedImage, sourceImage, timestamp }) => (
-                <div className="project-card group">
+                <div key={id} className="project-card group">
                   <div className="preview">
                     <img src={renderedImage || sourceImage} alt="Project" />
 
