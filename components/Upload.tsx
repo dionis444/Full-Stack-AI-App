@@ -122,7 +122,9 @@ const Upload: React.FC<UploadProps> = ({ onComplete, onError }) => {
                 : "Sign in or sign up with Puter to upload"}
             </p>
 
-            <p className="help">Supports JPG, PNG formats up to {MAX_UPLOAD_SIZE_MB}MB</p>
+            <p className="help">
+              Supports JPG, PNG formats up to {MAX_UPLOAD_SIZE_MB}MB
+            </p>
           </div>
         </div>
       ) : (
