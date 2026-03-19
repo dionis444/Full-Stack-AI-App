@@ -27,6 +27,13 @@ export const fetchAsDataUrl = async (url: string): Promise<string> => {
   })
 }
 
+import puter from "@heyputer/puter.js"
+import { ROOMIFY_RENDER_PROMPT } from "./constants"
+
+interface Generate3DViewParams {
+  sourceImage: string
+}
+
 export const generate3DView = async ({ sourceImage }: Generate3DViewParams) => {
   const dataUrl = sourceImage.startsWith("data:")
     ? sourceImage
